@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
     
 env:
-   DockerImageName=igor_frontend
+   DockerImageName=igorfrontend
 jobs:
   nodejs-build:
     name: Build and push Docker image

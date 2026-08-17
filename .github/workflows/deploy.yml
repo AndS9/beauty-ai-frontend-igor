@@ -14,18 +14,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
   
-      # - name: Stop and remove container
-      #   run: |
-      #     az vm run-command invoke \
-      #       --resource-group beauty-app-rg \
-      #       --name TestingVM \
-      #       --command-id RunShellScript \
-      #       --scripts "sudo /home/developer/flushdb.sh"
+      - name: Stop and remove container
+        run: |
+          az vm run-command invoke \
+            --resource-group beauty-app-rg \
+            --name TestingVM \
+            --command-id RunShellScript \
+            --scripts "docker stop igor_front && docker rm igor_front"
   
-      # - name: Start container
-      #   run: |
-      #     az vm run-command invoke \
-      #       --resource-group beauty-app-rg \
-      #       --name TestingVM \
-      #       --command-id RunShellScript \
-      #       --scripts "docker exec beauty-web python manage.py createsuperuser --noinput"
+      - name: Start container
+        run: |
+          az vm run-command invoke \
+            --resource-group beauty-app-rg \
+            --name TestingVM \
+            --command-id RunShellScript \
+            --scripts "docker run -d -p 5173:5173 --name igor_front andriis9/igor-frontend:1.0.5"

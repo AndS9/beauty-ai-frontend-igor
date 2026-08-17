@@ -1,5 +1,5 @@
 # Beauty AI Frontend
-
+TESTING NEW FLOW and VERSIONING
 Frontend application for **Beauty AI** — a beauty services booking platform with personalized recommendations and salon discovery.
 
 ## Overview

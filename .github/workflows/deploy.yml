@@ -1,0 +1,31 @@
+name: test-workflow
+run-name: "${{ github.actor }}-${{github.sha}}"
+on:
+  workflow_dispatch: 
+
+jobs:
+  nodejs-deploy:
+      name: Deploy to Azure VM
+      runs-on: ubuntu-latest
+      
+      steps:
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+  
+      # - name: Stop and remove container
+      #   run: |
+      #     az vm run-command invoke \
+      #       --resource-group beauty-app-rg \
+      #       --name TestingVM \
+      #       --command-id RunShellScript \
+      #       --scripts "sudo /home/developer/flushdb.sh"
+  
+      # - name: Start container
+      #   run: |
+      #     az vm run-command invoke \
+      #       --resource-group beauty-app-rg \
+      #       --name TestingVM \
+      #       --command-id RunShellScript \
+      #       --scripts "docker exec beauty-web python manage.py createsuperuser --noinput"

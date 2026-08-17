@@ -1,0 +1,57 @@
+name: frontend-workflow
+run-name: "${{ github.actor }}-${{github.sha}}"
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+env:
+   DockerImageName="igor_frontend"
+jobs:
+  nodejs-build:
+    name: Build and push Docker image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7.0.1
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push image
+      uses: docker/build-push-action@v7.3.0
+      with:
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DockerImageName }}:1.0.${{ github.run_number }}
+
+  # nodejs-deploy:
+  #   name: Deploy to Azure VM
+  #   runs-on: ubuntu-latest
+    
+  #   steps:
+  #   - name: Azure login
+  #     uses: azure/login@v3
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+  #   - name: Stop and remove container
+  #     run: |
+  #       az vm run-command invoke \
+  #         --resource-group beauty-app-rg \
+  #         --name TestingVM \
+  #         --command-id RunShellScript \
+  #         --scripts "sudo /home/developer/flushdb.sh"
+
+  #   - name: Start container
+  #     run: |
+  #       az vm run-command invoke \
+  #         --resource-group beauty-app-rg \
+  #         --name TestingVM \
+  #         --command-id RunShellScript \
+  #         --scripts "docker exec beauty-web python manage.py createsuperuser --noinput"
+  
+    
